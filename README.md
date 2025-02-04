@@ -1,27 +1,34 @@
-# React + TypeScript + Vite
+# Pizza Menu App Made with React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Requirements
+- Simple application, where users can order one or more pizzas from a menu
+- Requires no user accounts and no login: users can just input their name before using the app.
+- The pizza menu can change, so it should be loaded from an API
+- Users can add multiple pizzas to a cart before ordering
+- Ordering requires just the user's name, phone number and address.
+- If possible, the GPS location should also be provided
+- User's can mark their order as "priority" for an additional 20% of the cart price.
+- Orders are made by sending a POST request with the order data (user data + selected pizzas) to the API.
+- Payments are made on delivery, so no payment processing is required on the app.
+- Each order will get a unique ID that should be displayed, so that the user can look up their order based on the ID.
+- Users should be able to mark their order as "priority", even after it has been placed.
 
-Currently, two official plugins are available:
+### Feature Categories / State Slices
+- User: Global UI State
+- Menu: Global Remote State
+- Cart: Global UI State
+- Order: Global Remote State
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Pages
+- Homepage: `/`
+- Pizza Menu: `/menu`
+- cart: `/cart`
+- Placing a new order: `/order/new`
+- Looking up an order: `/order/:orderId`
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Technologies
+- Routing: `React Router`
+- Styling: `tailwindcss`
+- State Management
+  - Remote State: `React Router (v6.4)`
+  - Global UI State: `Redux`
