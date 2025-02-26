@@ -23,11 +23,11 @@ type CartAction = AddItemAction | RemoveItemAction | IncreaseQuantityAction | De
 
 type Cart = Pizza[]
 
-interface State {
+interface CartState {
   cart: Cart
 }
 
-const initialState: State = {
+const initialState: CartState = {
   cart: [],
 }
 
@@ -35,27 +35,27 @@ const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    addItem(state: State, action: AddItemAction) {
+    addItem(state: CartState, action: AddItemAction) {
       state.cart.push(action.payload)
     },
-    removeItem(state: State, action: RemoveItemAction) {
+    removeItem(state: CartState, action: RemoveItemAction) {
       state.cart.filter((item:Pizza) => item.pizzaId !== action.payload)
     },
-    increaseQuantity(state: State, action: IncreaseQuantityAction) {
+    increaseQuantity(state: CartState, action: IncreaseQuantityAction) {
       const item = state.cart.find((item) => item.pizzaId === action.payload)
       if (!item) return;
       item.quantity++;
 
       item.totalPrice += item.unitPrice;
     },
-    decreaseQuantity(state: State, action: DecreaseQuantityAction) {
+    decreaseQuantity(state: CartState, action: DecreaseQuantityAction) {
       const item = state.cart.find((item) => item.pizzaId === action.payload)
       if (!item) return;
       item.quantity++;
 
       item.totalPrice -= item.unitPrice;
     },
-    clearCart(state: State) {
+    clearCart(state: CartState) {
       state.cart = []
     },
   }
@@ -69,6 +69,6 @@ export const {
   clearCart,
 } = cartSlice.actions;
 
-export type { State, CartAction };
+export type { CartState, CartAction };
 
 export default cartSlice.reducer

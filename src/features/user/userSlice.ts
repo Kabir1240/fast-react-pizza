@@ -24,8 +24,17 @@ import { createSlice } from "@reduxjs/toolkit"
 //   return { position, address };
 // }
 
+interface UpdateNameAction {
+  payload: string
+}
 
-const initialState = {
+type UserAction = UpdateNameAction
+
+interface UserState {
+  username: string
+}
+
+const initialState: UserState = {
   username: '',
 }
 
@@ -33,11 +42,12 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    updateName(state, action) {
+    updateName(state: UserState, action: UpdateNameAction) {
       state.username = action.payload
     },
   },
 })
 
 export const { updateName } = userSlice.actions;
+export type {UserState, UserAction}
 export default userSlice.reducer;
