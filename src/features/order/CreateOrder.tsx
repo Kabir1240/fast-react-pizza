@@ -3,6 +3,7 @@
 import { Form, useActionData, useNavigation } from "react-router-dom";
 import Button from "../ui/Button";
 import { useSelector } from "react-redux";
+import { Store } from "../../store";
 
 const fakeCart = [
   {
@@ -31,7 +32,7 @@ const fakeCart = [
 function CreateOrder() {
   // const [withPriority, setWithPriority] = useState(false);
   const navigation = useNavigation();
-  const username = useSelector((state) => state.user.username);
+  const username = useSelector((state:Store) => state.user.username);
 
   const cart = fakeCart;
   const isSubmitting = navigation.state === 'submitting';

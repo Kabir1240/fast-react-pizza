@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit"
-import Pizza from "../../types/Pizza"
+import { CartPizza } from "../../types/PizzaTypes"
+import { Cart } from "../../types/CartTypes";
+import { Store } from "../../store";
 
 type PizzaId = number;
 
 interface AddItemAction {
-  payload: Pizza
+  payload: CartPizza
 }
 
 interface RemoveItemAction {
@@ -21,8 +23,6 @@ interface DecreaseQuantityAction {
 
 type CartAction = AddItemAction | RemoveItemAction | IncreaseQuantityAction | DecreaseQuantityAction
 
-type Cart = Pizza[]
-
 interface CartState {
   cart: Cart
 }
@@ -36,10 +36,23 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addItem(state: CartState, action: AddItemAction) {
-      state.cart.push(action.payload)
+      const item = state.cart.find((item: CartPizza) => item.pizzaId === action.payload.pizzaId)
+      if (item) {
+        item.quantity++;
+        item.totalPrice = item.quantity * item.unitPrice;
+      } else {
+        state.cart.push(action.payload)
+      }
     },
     removeItem(state: CartState, action: RemoveItemAction) {
-      state.cart.filter((item:Pizza) => item.pizzaId !== action.payload)
+      const item = state.cart.find((item: CartPizza) => item.pizzaId === action.payload)
+      if (!item) return
+      if (item.quantity > 1) {
+        item.quantity--;
+        item.totalPrice = item.quantity * item.unitPrice;
+      } else {
+        state.cart = state.cart.filter((item:CartPizza) => item.pizzaId !== action.payload);
+      }
     },
     increaseQuantity(state: CartState, action: IncreaseQuantityAction) {
       const item = state.cart.find((item) => item.pizzaId === action.payload)
@@ -51,7 +64,7 @@ const cartSlice = createSlice({
     decreaseQuantity(state: CartState, action: DecreaseQuantityAction) {
       const item = state.cart.find((item) => item.pizzaId === action.payload)
       if (!item) return;
-      item.quantity++;
+      item.quantity--;
 
       item.totalPrice -= item.unitPrice;
     },
@@ -70,5 +83,10 @@ export const {
 } = cartSlice.actions;
 
 export type { CartState, CartAction };
+
+const getCart = (state:Store) => state.cart.cart
+const getTotalQuantity = (state:Store) => state.cart.cart.reduce((sum: number, item: CartPizza) => sum + item.quantity, 0)
+const getTotalPrice = (state:Store) => state.cart.cart.reduce((sum: number, item: CartPizza) => sum + item.totalPrice, 0)
+export { getCart, getTotalQuantity, getTotalPrice }
 
 export default cartSlice.reducer

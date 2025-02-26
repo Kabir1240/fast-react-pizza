@@ -1,7 +1,8 @@
 import { useSelector } from "react-redux"
+import { Store } from "../../store";
 
 export default function Username() {
-  const username = useSelector((state) => state.user.username)
+  const username = useSelector((state:Store) => state.user.username)
   if (!username) return null;
   
   return (
