@@ -1,4 +1,6 @@
 import { redirect } from "react-router-dom";
+import store from "../store";
+import { clearCart } from "../features/cart/cartSlice";
 
 const API_URL = 'https://react-fast-pizza-api.onrender.com/api';
 
@@ -30,7 +32,7 @@ export async function orderLoader({ params }) {
 export async function newOrderAction({ request }) {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
-
+  console.log(data);
   const order = {
     ...data,
     cart: JSON.parse(data.cart),
@@ -42,15 +44,20 @@ export async function newOrderAction({ request }) {
     errors.phone = "Please give us a valid phone number"
   }
 
-  console.log(errors);
   if (Object.keys(errors).length > 0) return errors;
 
   // order only created if no errors
+  store.dispatch(clearCart());
   const newOrder = await createOrder(order);
   return redirect(`/order/${newOrder.id}`)
 }
 
-async function createOrder(newOrder) {
+export async function updateOrderAction({ params }) {
+  const data = { priority: true };
+  await updateOrder(params.orderId, data)
+}
+
+export async function createOrder(newOrder) {
   try {
     const res = await fetch(`${API_URL}/order`, {
       method: 'POST',
